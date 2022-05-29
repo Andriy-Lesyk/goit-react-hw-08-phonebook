@@ -29,7 +29,7 @@ export default function Form() {
 
     contCheck
       ? alert(`${name} is olready in contacts`)
-      : dispatch(addContacts({ id, name, number }));
+      : dispatch(addContacts({id, name, number }));
     resetForm();
   };
   const resetForm = () => {

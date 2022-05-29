@@ -1,63 +1,55 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'https://connections-api.herokuapp.com/';
 
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchContacts',
-  async (_, { rejectWithValue, fulfillWithValue }) => {
+  async (_, { rejectWithValue, fulfillWithValue }) => { 
     try {
-      const contacts = await fetch(
-        `https://6284af5d3060bbd3473d4a1e.mockapi.io/Contacts`
-      );
+      const contacts = await axios.get('/contacts')
       if (!contacts.ok) {
         return rejectWithValue(contacts.status);
       }
-      const data = await contacts.json();
-
-      return fulfillWithValue(data);
+      return fulfillWithValue(contacts);
     } catch (error) {
       throw rejectWithValue(error.message);
     }
   }
 );
+
 
 export const addContacts = createAsyncThunk(
   'contacts/addContacts',
   async (contact, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const contacts = await fetch(
-        `https://6284af5d3060bbd3473d4a1e.mockapi.io/Contacts`,
-        {
-          method: 'POST',
-          body: JSON.stringify(contact),
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      const contacts = await axios.post('/contacts', contact)
       if (!contacts.ok) {
         return rejectWithValue(contacts.status);
-      }
-      const data = await contacts.json();
-      return fulfillWithValue(data);
+      } 
+      return fulfillWithValue(contacts);
     } catch (error) {
       throw rejectWithValue(error.message);
     }
   }
 );
+
 
 export const deleteContacts = createAsyncThunk(
   'contacts/deleteContacts',
   async (id, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const contacts = await fetch(
-        `https://6284af5d3060bbd3473d4a1e.mockapi.io/Contacts/${id}`,
-        { method: 'DELETE' }
-      );
+      const contacts = await axios.delete('/contacts/'`${id}`)
       if (!contacts.ok) {
         return rejectWithValue(contacts.status);
       }
-      const data = await contacts.json();
-
-      return fulfillWithValue(data);
+      return fulfillWithValue(contacts);
     } catch (error) {
       throw rejectWithValue(error.message);
     }
   }
 );
+
+
+
+
