@@ -5,51 +5,41 @@ axios.defaults.baseURL = 'https://connections-api.herokuapp.com/';
 
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchContacts',
-  async (_, { rejectWithValue, fulfillWithValue }) => { 
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const isLogged = state.auth.isLoggedIn
+    if(isLogged===false){
+      return
+    }
     try {
-      const contacts = await axios.get('/contacts')
-      if (!contacts.ok) {
-        return rejectWithValue(contacts.status);
-      }
-      return fulfillWithValue(contacts);
+      const { data } = await axios.get('/contacts');
+      return data;
     } catch (error) {
-      throw rejectWithValue(error.message);
+      return error;
     }
   }
 );
-
 
 export const addContacts = createAsyncThunk(
   'contacts/addContacts',
-  async (contact, { rejectWithValue, fulfillWithValue }) => {
+  async contact => {
     try {
-      const contacts = await axios.post('/contacts', contact)
-      if (!contacts.ok) {
-        return rejectWithValue(contacts.status);
-      } 
-      return fulfillWithValue(contacts);
+      const { data } = await axios.post('/contacts', contact);
+      return data;
     } catch (error) {
-      throw rejectWithValue(error.message);
+      return error;
     }
   }
 );
-
 
 export const deleteContacts = createAsyncThunk(
   'contacts/deleteContacts',
-  async (id, { rejectWithValue, fulfillWithValue }) => {
+  async id => {
     try {
-      const contacts = await axios.delete('/contacts/'`${id}`)
-      if (!contacts.ok) {
-        return rejectWithValue(contacts.status);
-      }
-      return fulfillWithValue(contacts);
+      const { data } = await axios.delete(`/contacts/${id}`);
+      return data;
     } catch (error) {
-      throw rejectWithValue(error.message);
+      return error;
     }
   }
 );
-
-
-
-
