@@ -18,7 +18,7 @@ const register = createAsyncThunk('/register', async credentials => {
     token.set(data.token);
     return data;
   } catch (error) {
-    return error;
+    return alert('Даний адрес електронної почти уже використовується, або не валідний запис!');
   }
 });
 
@@ -28,7 +28,7 @@ const logIn = createAsyncThunk('/login', async credentials => {
     token.set(data.token);
     return data;
   } catch (error) {
-    return error;
+    return alert('За даною адресою не користувач не знайдений!');
   }
 });
 
