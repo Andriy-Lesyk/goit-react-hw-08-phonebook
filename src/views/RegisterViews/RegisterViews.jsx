@@ -42,7 +42,8 @@ export default function RegisterViews() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log();
+    password.length<7 ?
+    alert('Пароль повинен містити мінімум сім символів'):
     dispatch(authOperations.register({ name, email, password }));
     setName('');
     setEmail('');
