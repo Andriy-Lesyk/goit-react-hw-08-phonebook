@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export const NotFoundViews = () => {
+ const NotFoundViews = () => {
   return (
     <h1>
       404 Страница не найдена :(, перейдите на{' '}
@@ -8,3 +8,5 @@ export const NotFoundViews = () => {
     </h1>
   );
 };
+
+export default  NotFoundViews

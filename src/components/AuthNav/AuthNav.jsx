@@ -1,14 +1,14 @@
 import React from 'react';
-import {Link} from './AuthNav.styled'
+import { Link, Div } from './AuthNav.styled';
 
 function AuthNav() {
   return (
-    <div>
+    <Div>
       <nav>
-        <Link to="/register">Регистрация</Link>
-        <Link to="/login">Логин</Link>
+        <Link to="/register"> Регистрация</Link>
+        <Link to="/login"> Логин</Link>
       </nav>
-    </div>
+    </Div>
   );
 }
 

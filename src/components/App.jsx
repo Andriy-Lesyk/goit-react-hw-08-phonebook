@@ -1,29 +1,64 @@
-import React, {useEffect} from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, Suspense, lazy } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
-import AppBar from './AppBar/AppBar';
-import RegisterViews from '../views/RegisterViews/RegisterViews';
-import LoginViews from '../views/LoginViews/LoginViews';
-import HomeViews from '../views/HomeViews/HomeViews';
-import { NotFoundViews } from '../views/NotFoundVievs/NotFoundViews';
-import { authOperations } from '../redux/auth';
+import AppBarr from './AppBar/AppBar';
+import NotFoundViews from '../views/NotFoundVievs/NotFoundViews';
+import { authOperations, authSelectors } from '../redux/auth';
+import PrivateRoute from './PrivateRoute';
+import PublicRoute from './PublicRoute';
+
+
+
+const ContactsViews = lazy(() =>
+  import('../views/ContactsViews/ContactsViews')
+);
+const RegisterViews = lazy(() =>
+  import('../views/RegisterViews/RegisterViews')
+);
+const LoginViews = lazy(() => import('../views/LoginViews/LoginViews'));
 
 export default function App() {
   const dispatch = useDispatch();
+  const isRefreshing = useSelector(authSelectors.getIsRefreshing);
 
-  useEffect(()=>{
-    dispatch(authOperations.fetchCurrentUser())
-  }, [dispatch])
+  useEffect(() => {
+    dispatch(authOperations.fetchCurrentUser());
+  }, [dispatch]);
+
   return (
-    <div>
-      <AppBar />
-      <Routes>
-        <Route path="/"  />
-        <Route path="register" element={<RegisterViews />} />
-        <Route path="login" element={<LoginViews />} />
-        <Route path="contacts" element={<HomeViews />}/>
-        <Route path="*" element={<NotFoundViews />} />
-      </Routes>
-    </div>
+    !isRefreshing && (
+      <div>
+        <AppBarr />
+        <Suspense fallback={<p>Загружаем...</p>}>
+          <Routes>
+            <Route
+              path="register"
+              element={
+                <PublicRoute restricted>
+                  <RegisterViews />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="login"
+              element={
+                <PublicRoute restricted>
+                  <LoginViews />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="contacts"
+              element={
+                <PrivateRoute>
+                  <ContactsViews />
+                </PrivateRoute>
+              }
+            />
+            <Route path="*" element={<NotFoundViews />} />
+          </Routes>
+        </Suspense>
+      </div>
+    )
   );
 }
