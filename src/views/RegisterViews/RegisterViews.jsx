@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import authOperations from '../../redux/auth/auth-operations';
+import authSelectors from '../../redux/auth/auth-selectors';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,6 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Audio } from 'react-loader-spinner';
 
 function Copyright(props) {
   return (
@@ -39,12 +41,13 @@ export default function RegisterViews() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const isLoading = useSelector(authSelectors.getIsLoading);
 
   const handleSubmit = e => {
     e.preventDefault();
-    password.length<7 ?
-    alert('Пароль повинен містити мінімум сім символів'):
-    dispatch(authOperations.register({ name, email, password }));
+    password.length < 7
+      ? alert('Пароль повинен містити мінімум сім символів')
+      : dispatch(authOperations.register({ name, email, password }));
     setName('');
     setEmail('');
     setPassword('');
@@ -96,6 +99,7 @@ export default function RegisterViews() {
               name="name"
               autoComplete="name"
               autoFocus
+              value={name}
               onChange={handleChange}
             />
             <TextField
@@ -107,6 +111,7 @@ export default function RegisterViews() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
               onChange={handleChange}
             />
             <TextField
@@ -117,6 +122,7 @@ export default function RegisterViews() {
               label="Password"
               type="password"
               id="password"
+              value={password}
               autoComplete="current-password"
               onChange={handleChange}
             />
@@ -128,6 +134,14 @@ export default function RegisterViews() {
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up
+              {isLoading && (
+                <Audio
+                  height="20"
+                  width="20"
+                  color="orange"
+                  ariaLabel="loading"
+                />
+              )}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

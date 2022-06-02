@@ -41,7 +41,7 @@ function Contact() {
           Contacts
         </Typography>
         <Contacts>
-          {contacts.length > 0 &&
+          {contacts.length > 0 ? (
             contacts.map(({ name, number, id }) => (
               <Contac key={id}>
                 <Box
@@ -67,7 +67,12 @@ function Contact() {
                   </Button>
                 </Box>
               </Contac>
-            ))}
+            ))
+          ) : (
+            <Typography component="h1" variant="h4">
+              There are no contacts
+            </Typography>
+          )}
         </Contacts>
       </Box>
     </div>

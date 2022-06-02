@@ -9,9 +9,11 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { authOperations } from 'redux/auth';
+import authSelectors from '../../redux/auth/auth-selectors';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Audio } from 'react-loader-spinner';
 
 function Copyright(props) {
   return (
@@ -37,6 +39,7 @@ export default function LoginViews() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const isLoading = useSelector(authSelectors.getIsLoading);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -89,6 +92,7 @@ export default function LoginViews() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
               onChange={handleChange}
             />
             <TextField
@@ -99,6 +103,7 @@ export default function LoginViews() {
               label="Password"
               type="password"
               id="password"
+              value={password}
               autoComplete="current-password"
               onChange={handleChange}
             />
@@ -110,6 +115,14 @@ export default function LoginViews() {
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
+              {isLoading && (
+                <Audio
+                  height="20"
+                  width="20"
+                  color="orange"
+                  ariaLabel="loading"
+                />
+              )}
             </Button>
           </Box>
         </Box>

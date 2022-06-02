@@ -12,32 +12,40 @@ export const token = {
   },
 };
 
-const register = createAsyncThunk('/register', async credentials => {
-  try {
-    const { data } = await axios.post('/users/signup', credentials);
-    token.set(data.token);
-    return data;
-  } catch (error) {
-    return alert('Даний адрес електронної почти уже використовується, або не валідний запис!');
+const register = createAsyncThunk(
+  '/register',
+  async credentials => {
+    try {
+      const { data } = await axios.post('/users/signup', credentials);
+      
+      token.set(data.token);
+      return (data);
+    } catch (error) {
+      return alert('Sorry sign up is failed');
+      
+    }
   }
-});
+);
 
-const logIn = createAsyncThunk('/login', async credentials => {
-  try {
-    const { data } = await axios.post('/users/login', credentials);
-    token.set(data.token);
-    return data;
-  } catch (error) {
-    return alert('За даною адресою не користувач не знайдений!');
+const logIn = createAsyncThunk(
+  '/login',
+  async credentials => {
+    try {
+      const { data } = await axios.post('/users/login', credentials);
+      token.set(data.token);
+      return (data);
+    } catch (error) {
+      return alert('Sorry sign in is failed');
+    }
   }
-});
+);
 
 const logOut = createAsyncThunk('auth/logout', async () => {
   try {
     await axios.post('/users/logout');
     token.unset();
   } catch (error) {
-    return error;
+    return alert('Повторіть спробу');
   }
 });
 
@@ -53,7 +61,9 @@ const fetchCurrentUser = createAsyncThunk(
     try {
       const { data } = await axios.get('/users/current');
       return data;
-    } catch (error) {}
+    } catch (error) {
+      return alert('Ups');
+    }
   }
 );
 
